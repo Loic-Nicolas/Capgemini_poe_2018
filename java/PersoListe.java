@@ -1,31 +1,62 @@
 package com.nestedlist.classes;
 
+// classe qui définit des listes chaînées
 public class PersoListe {
 	
-	private Item start;
-	private Item last;
+	private Item start; 	// item situé au début de la liste
+	private Item last; 		// item situé à la fin de la liste
+	
+	// compte le nombre d'items dans la liste
+	public int count () {
+		int taille = 0;
+		
+		if (this.start == null) { 				// si la liste est vide
+			return taille; 						// taille = 0
+		} else {
+			Item current = this.start; 			// on crée un curseur au début de la liste
+			do {
+				taille++;
+				current = current.getSuivant(); // on déplace le curseur de proche en proche
+			} while (current != null);
+			return taille;
+		}
+	}
+	
+	// affiche tous les items de la liste
+	public void viewAll () {
+		System.out.println("");
+		if (this.start == null) { 							// si la liste est vide
+			System.out.println("Il n'y a pas de valeur");
+		} else {
+			Item current = this.start; 						// on crée un curseur au début de la liste
+			for (int i = 0; i < this.count(); i++) {
+				System.out.println(current.getValeur()); 	// on affiche la valeur de l'élément
+				current = current.getSuivant(); 			// on déplace le curseur de proche en proche
+			}
+		}
+	}
 	
 	// ajoute un élément à la fin de la chaine
 	public void add (String value) {
-		if (start == null) {
-			this.start = new Item (null, null, value);
+		if (start == null) { 									// si la liste est vide
+			this.start = new Item (null, null, value); 			// on crée le début de la chaîne
 			this.last = this.start;
 		} else {
-			Item newItem = new Item(this.last, null, value);
-			this.last.setSuivant(newItem);
-			this.last = newItem;
+			Item newItem = new Item (this.last, null, value); 	// on crée un élément
+			this.last.setSuivant(newItem); 						// on le chaine au dernier élément de la chaine
+			this.last = newItem; 								// le nouvel élément est maintenant le dernier élément de la chaîne
 		}
 	}
 	
 	// renvoie l'item à un indice donné
 	public Item itemAt (int index) {
-		if (index < this.count() && index >= 0) {
-			Item current = this.start;
+		if (index < this.count() && index >= 0) { 	// si l'indice est dans la liste
+			Item current = this.start; 				// on crée un curseur au début de la liste
 			for (int i = 0; i < index; i++) {
-				current = current.getSuivant();
+				current = current.getSuivant(); 	// on déplace le curseur de proche en proche
 			}
 			return current;
-		} else {
+		} else { 									// si l'indice est en dehors des bornes de la liste
 			System.out.println("Pas un bon indice");
 			return null;
 		}
@@ -33,64 +64,34 @@ public class PersoListe {
 	
 	// retire l'item à un indice donné
 	public void removeAt (int index) {
-		if (index == 0) {
+		if (index == 0) { 												// si on veut supprimer le premier élément de la liste
 			start.getSuivant().setPrecedent(null);
-			start = start.getSuivant();
-		} else if (index == this.count() - 1) {
+			start = start.getSuivant(); 								// on réassigne le début de la liste
+		} else if (index == this.count() - 1) { 						// si on veut supprimer le dernier élément de la liste
 			last.getPrecedent().setSuivant(null);
-			last = last.getPrecedent();
+			last = last.getPrecedent(); 								// on réassigne la fin de la liste
 		} else {
 			Item current = itemAt(index);
-			current.getPrecedent().setSuivant(current.getSuivant());
-			current.getSuivant().setPrecedent(current.getPrecedent());
+			current.getPrecedent().setSuivant(current.getSuivant()); 	// on lie le N-1 au N+1
+			current.getSuivant().setPrecedent(current.getPrecedent()); 	// on lie le N+1 au N-1
 		}
 	}
 	
-	// affiche tous les items de la liste
-	public void viewAll () {
-		System.out.println("");
-		if (this.start == null) {
-			System.out.println("Il n'y a pas de valeur");
-		} else {
-			Item current = this.start;
-			for (int i = 0; i < this.count(); i++) {
-				System.out.println(current.getValeur());
-				current = current.getSuivant();
-			}
-		}
-	}
-	
-	// compte le nombre d'items dans la liste
-	public int count () {
-		int taille = 0;
-		
-		if (this.start == null) {
-			return taille;
-		} else {
-			Item current = this.start;
-			do {
-				taille++;
-				current = current.getSuivant();
-			} while (current != null);
-			return taille;
-		}
-	}
-	
-	// classe qui contient un élément de la chaine
+	// classe qui définit un élément de la chaine
 	class Item {
 		// attributs
-		private Item precedent;
-		private Item suivant;
-		private String valeur;
+		private Item precedent; 	// item précédent dans la liste
+		private Item suivant; 		// item suivant dans la liste
+		private String valeur; 		// valeur contenue par l'item
 		
 		// constructeurs
 		public Item() {
 			
 		}
-		public Item(Item prec, Item suiv, String val) {
+		public Item(Item prec, Item suiv, String value) {
 			this.precedent = prec;
 			this.suivant = suiv;
-			this.valeur = val;
+			this.valeur = value;
 		}
 		
 		// getters et setters
@@ -112,6 +113,7 @@ public class PersoListe {
 		public void setValeur(String valeur) {
 			this.valeur = valeur;
 		}
-		
+
 	}
+	
 }
